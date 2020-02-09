@@ -8,12 +8,12 @@ router.route("/").get((req, res) => {
 });
 
 router.route("/create").post((req, res) => {
-  const username = req.body.username;
-  const queryTerms = req.body.queryTerms;
+  const {username, queryInterval, queryTerms} = req.body;
 
   const newQuery = new Query({
     username,
-    queryTerms
+    queryTerms,
+    queryInterval
   });
 
   newQuery
@@ -37,9 +37,6 @@ router.route("/:id").delete((req, res) => {
 router.route("/update/:id").post((req, res) => {
   Query.findById(req.params.id)
     .then(query => {
-      query.username = req.body.username;
-      query.queryTerms = req.body.queryTerms;
-
       query
         .save()
         .then(() => res.json("Query updated!"))
